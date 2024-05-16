@@ -1,0 +1,50 @@
+body {
+    font-family: poppins, sans-serif;
+    text-align: center;
+}
+
+#parent {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 50px;
+}
+
+button {
+    font-size: 20px;
+    padding: 10px 20px;
+    background-color: rgb(38, 130, 236);
+    color: white;
+    font-weight: bold;
+    border: 0;
+    border-radius: 10px;
+
+}
+
+button:hover {
+    background-color: white;
+    border: 1px solid rgb(38, 130, 236);
+    color: rgb(38, 130, 236);
+    cursor: pointer;
+}
+
+#child {
+    width: fit-content;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    padding: 10px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+p {
+    font-size: 18px;
+    color: brown;
+}
+
+#child img {
+    background-color: beige;
+    padding: 5px;
+    border-radius: 20px;
+    border: 1px solid lightcyan;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}

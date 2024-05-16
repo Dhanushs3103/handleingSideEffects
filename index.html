@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Handleing the side effets</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <style></style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script type="text/babel">
+        // function to get data
+
+        const getData = async (url) => {
+          try {
+            let res = await fetch(url);
+            let data = await res.json();
+            return data;
+          } catch (error) {
+            throw new Error(error);
+          }
+        };
+
+        function App() {
+          const [loading, setLoading] = React.useState(false);
+          const [users, setUsers] = React.useState([]);
+          const [err, setErr] = React.useState(false);
+          const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
+
+
+          React.useEffect(() => {
+                const handleMouseMove = (event) => {
+                    setMousePosition({ x: event.clientX, y: event.clientY });
+                };
+    
+                document.addEventListener('mousemove', handleMouseMove);
+    
+                return () => {
+                    document.removeEventListener('mousemove', handleMouseMove);
+                };
+            }, []);
+
+          const fetchAndUpdateData = async () => {
+            setLoading(true);
+            try {
+              let data = await getData(`https://reqres.in/api/users`);
+              setUsers(data.data);
+              console.log(data.data);
+              setLoading(false);
+            } catch (error) {
+              setErr(true);
+              setLoading(false);
+            } finally {
+              setLoading(false);
+            }
+          };
+
+          if (loading) {
+            return <h1>Loading...</h1>;
+          }
+
+          if (err) {
+            return <h1>Something went wrong.. please refresh the page</h1>;
+          }
+
+          return (
+            <>
+              <h1>Click on the below button to get Users data</h1>
+              <button onClick={fetchAndUpdateData}>Get Users</button>
+              <p>Mouse Position: X: {mousePosition.x}, Y: {mousePosition.y}</p>
+              <div id="parent">
+                {users.map((user) => (
+                  <UserItem
+                    key={user.id}
+                    id={user.id}
+                    title={user.title}
+                    avatar={user.avatar}
+                    last_name={user.last_name}
+                    first_name={user.first_name}
+                  />
+                ))}
+              </div>
+            </>
+          );
+        }
+        
+
+        const UserItem = ({ avatar, first_name, last_name }) => {
+          return (
+            <>
+            <div id="child">
+              <p>
+                Name: {first_name} {last_name}
+              </p>
+              <img src={avatar} alt="avatar" />
+            </div>
+            </>
+          );
+        };
+
+        let rootElement = ReactDOM.createRoot(document.getElementById("root"));
+        rootElement.render(<App />);
+  </script>
+</html>
